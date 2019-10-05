@@ -13,7 +13,7 @@ serial_number: '004'
 doc_id: 'ITTN-004'
 
 # Title of the document, without the series/serial designation
-doc_title: '[Proposed] LSST On-Prem Domain Name Service (DNS) '
+doc_title: '[Proposed] LSST On-Prem Domain Name Service (DNS)'
 
 # Author names, ordered as a list. Each author name should be formatted as 'First Last'
 authors:
@@ -37,7 +37,7 @@ authors:
 copyright: '2019, Association of Universities for Research in Astronomy'
 
 # Description. A short, 1-2 sentence statemement used by document indices.
-description: 'Simplified DNS strategy for LSST's On-Prem datacenter operations.'
+description: 'Simplified DNS strategy for LSST On-Prem datacenter operations.'
 
 # Abstract, if available
 # abstract: >
