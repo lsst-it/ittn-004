@@ -3,3 +3,191 @@
 .. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
 
 .. sectnum::
+
+Introduction
+============
+
+   There are only two hard things in Computer Science: cache invalidation and
+   naming things.
+
+   — Phil Karlton
+
+We assert that hostnames are primarily for **human** convience and should be
+easy to remember, easy to predict, and conceses.  This should be the primary
+guiding principle when developing naming heuristic(s).
+
+Prior Art
+---------
+
+There is an existing proposal for LSST DNS organzation at
+`LSST ITC DNS Infrastructure <https://confluence.lsstcorp.org/display/SYSENG/LSST+ITC+DNS+Infrastructure>`_.
+
+There are a number of criticisms of this propsoal, including:
+
+* It sesults in large and difficult to remember hostnames. Eg.,
+  ``comp-a4-hyp-gs-02.cp.cl.lsst.org``
+* Heavy paritioning / high complexity is not nessicary for the modest scale
+  of the in-scope environments.
+* Country level sub-domains are unnesicary partitioning for a small number of
+  sites.
+* Hostnames for servers and services that encoding details for the physical
+  location (room, rack, etc.) and/or network structure will result in brittle
+  configuration of dependant services.  Re-provisioning or relocating a server
+  to a different location should not generally require client configuration
+  changes.  Similarly, changes to the logical network should not require
+  modifying the hostname.
+
+Domains
+-------
+
+LSST as a project, and within the IT organization, is already using a number of
+different domains.  We do not believe there is a top level requirement or
+constraint that all or even most of LSST's computing infrastructure needs to be
+arranged in a hierachy underneath a common domain.
+
+A non-exhaustive list of domains known to be currently in use by LSST:
+
+* ``lsst.org`` (IT)
+* ``lsstcorp.org`` (IT)
+* ``ls.st`` (IT)
+* ``lsst.local`` (IT)
+* ``lsst.codes`` (DM/SQRE)
+* ``lsst.io`` (DM/SQRE)
+* ``lsst.cloud`` (DM/SQRE)
+* ``ncsa.illinois.edu`` (DM/\*)
+* ``lsst.rocks`` (DM/DAX)
+
+Split-View DNS and VPNs
+-----------------------
+
+`Split-view or split-horzon DNS
+<https://en.wikipedia.org/wiki/Split-horizon_DNS>`_ is simply providing
+different name resolvution information to internal clients and the public DNS
+hierachy.  The implication of this is that "internal" name servers are the only
+source of "internal" name information.  The motivation for a split view is
+often to avoid providing network information to an adversary.  However, the
+obscuration is by no measure absolute. For example, it does not mitigate
+traffic observation.  If any host with access to "internal" DNS is comprimised,
+the hidden name information is exposed.  We also note that no LSST threat model
+currently exists which requires obscuring internal network information.
+
+Typically, access to "internal" nameservers is provided to and automatically
+configured for VPN clients upon connection.  This model works for VPN users
+that will only ever be connected to a single VPN at a time.  However, it
+completely falls apart if multiple VPNs are in use, with each trying to
+configure its own nameservers to provide "internal" name resolution.  This
+problem is already being encountered within LSST Data Managment with remote
+users needing to connect via VPN to both NCSA and NOAO in Tucson.
+
+Summit Degraded Operations
+--------------------------
+
+Unlike all other LSST sites, the summit network has a requirement to function
+with a complete loss of external connectivity.  We acknowledge that this means
+that a hosted service such as `route53 <https://aws.amazon.com/route53/>`_
+alone is not sufficent for the operational needs of the summit network.
+However, a hosted DNS service should be sufficent for all other sites.
+
+Goals
+=====
+
+* Support immediate development and commisioning needs
+* Rapid implimentation
+* Avoid disrupting existing desktop/AD environment
+* Low implimenation complexity / low maintence burden
+* Avoid pain for multi-vpn users
+* Support automated deployment via forman (ittn-002); DNS service must have an API that is supported by an existing foreman plugin.
+
+Scope
+=====
+
+Sites
+-----
+
+* Summit
+* Base
+* Tucson
+
+All other envirnoments that may be hosting lsst equipment or services are
+explicitly out of scope. E.g.: the names of camera development servers at SLAC
+
+
+Domain name(s)
+==============
+
+option a
+---------
+
++---------------------+--------------------+
+| Site                | Domain name        |
++=====================+====================+
+| Tucson              | ``tuc.lsst.cloud`` |
++---------------------+--------------------+
+| Summit/Cerro Pachón | ``cp.lsst.cloud``  |
++---------------------+--------------------+
+| Base/La Serena      | ``ls.lsst.cloud``  |
++---------------------+--------------------+
+
+option b
+--------
+
++---------------------+----------------+
+| Site                | Domain Name    |
++=====================+================+
+| Tucson              | ``tu.lsst.st`` |
++---------------------+----------------+
+| Summit/Cerro Pachón | ``cp.ls.st``   |
++---------------------+----------------+
+| Base/La Serena      | ``ls.ls.st``   |
++---------------------+----------------+
+
+Infrastructure
+==============
+
+Foward and reverse DNS for all sites is managed via public route53 zones.
+`route53 <https://aws.amazon.com/route53/>`_ is considered the canonical and
+sole "source of truth".  Two forwarding only / caching name servers are
+maintained per site.  DNS clients are configured to use the per site local
+resolvers to simplify any future refactoring.
+
+The local site domain shall be added to the domain search list of any desktop
+enviroments at that site.  E.g., ``tuc.lsst.cloud`` would be added to the
+domain search list for desktop clients in Tucson.
+
+Local Resolvers
+---------------
+
+Due to existing staff familiarity, at least initially, `ISC BIND
+<https://www.isc.org/bind/>`_ shall be use as local site forward resolver.
+`Unbound <https://www.nlnetlabs.nl/projects/unbound/about/>`_ or other "more
+modern" DNS services shall be evaluated in the future.
+
+Summit/Cerro Pachón
+-------------------
+
+Prior to the start of operations, the summit nameservers shall be reconfigured
+to be "authoritive" for all local zones.  `route53
+<https://aws.amazon.com/route53/>`_ will continue to be the definitive source
+of truth.  The zone configuration for local nameservers shall be machine
+generated from route53 information.
+
+`ruby_route_53 <https://github.com/pcorliss/ruby_route_53>`_ is an example of
+an existing tool that is able to generate `ISC BIND
+<https://www.isc.org/bind/>`_ compatible zone files from route53 zones.
+
+Hostnames
+=========
+
+Use "conversational" names.
+
+bad
+
+``node1``
+
+better
+
+``k8s1``
+
+best
+
+``larry1``
