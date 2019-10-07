@@ -412,3 +412,8 @@ Wifi Access Points
 ^^^^^^^^^^^^^^^^^^
 
 Format ``<location>-ap<index>``.
+
+PDUs
+^^^^
+
+Format ``<location>-pdu<index>``.
