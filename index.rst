@@ -197,6 +197,10 @@ option b
 Infrastructure
 ==============
 
+.. figure:: /_static/resolvers.png
+   :name: fig-name-forwarders
+   :alt: obligatory diagram
+
 Forward and reverse DNS for all sites is managed via public route53 zones.
 `route53 <https://aws.amazon.com/route53/>`_ is considered the canonical and
 sole "source of truth".  Two forwarding only / caching name servers shall be
