@@ -339,3 +339,63 @@ Example hostnames:
 +--------------------------+-------------------+
 | ``555-857-6309``         | ``ph-5555876309`` |
 +--------------------------+-------------------+
+
+Fixed Location Devices
+----------------------
+
+It is common for network devices to have a role or function which is dependent
+upon its location within a data center. For example, a "top of rack" (TOR)
+switch is inherently associated with the rack/cabinet in which it is installed.
+If a physical TOR switch is relocated to another cabinet, its existing
+configuration would be invalidated, and it would be serving a new role as the
+TOR for the new cabinet.  Conversely, if a core/spine switch is relocated
+between cabinets, as long as it is serving the same logical function within the
+network, its name should not change.  For this reason, it is appropriate for
+the location to be part of the hostname for certain classes of devices, such as
+a TOR.
+
+**Per site location names are out of the scope of this document.**
+
+TOR Switches
+^^^^^^^^^^^^
+
+Consider a cabinet configured with two TOR switches.  One is a 10G access
+switch configured as a leaf in the main leaf/spine topology and the other is a
+lower cost 1G switch connected to an independent "management" topology that
+provide redundant uplinks for reliability but is not designed for high
+performance east<->west traffic.  The management switch would be used to
+connect PDUs, BMCs, IP cameras, etc.
+
+While both switches are l2/l3 Ethernet switches associated with the same
+physical cabinet, their function may be different enough to warrant a distinct
+naming convention.
+
+TOR switch hostname format:
+
++----------------+-----------------------------+
+| switch type    | format                      |
++================+=============================+
+| regular access | ``<location>-sw<index>``    |
++----------------+-----------------------------+
+| management     | ``<location>-mgtsw<index>`` |
++----------------+-----------------------------+
+
+Example hostnames if the location / name of cabinet was ``dc-a1``:
+
++----------------+------------------+
+| switch type    | hostname         |
++================+==================+
+| regular access | ``dc-a1-sw1``    |
++----------------+------------------+
+| management     | ``dc-aw-mgtsw1`` |
++----------------+------------------+
+
+IP Cameras
+^^^^^^^^^^
+
+Format ``<location>-cam<index>``.
+
+Wifi Access Points
+^^^^^^^^^^^^^^^^^^
+
+Format ``<location>-ap<index>``.
