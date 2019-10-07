@@ -276,3 +276,26 @@ Example hostnames:
 +-------------------+---------------------+
 | ``comcam-db01``   | ``comcam-db01-bmc`` |
 +-------------------+---------------------+
+
+IP Phones
+---------
+
+IP Phones have a tendency to be migrated between physical rooms.  An example
+of this would be a desktop user migrating between offices and taking the phone
+with them.  Due to this mobility, phones should not be named by physical
+location.  While the extensions bound to a phone may change over time, it is a
+highly useful handle for identifying a device.  The suggested format is
+``ph-x<primary extension>```.  If a phone does not have an internal extension
+in the dial plane and only uses a DID, the format is ``ph-<DID>``.
+
+Example hostnames:
+
++--------------------------+-------------------+
+| primary extension or DID | phone hostname    |
++==========================+===================+
+| ``x1234``                | ``ph-x1234``      |
++--------------------------+-------------------+
+| ``x56``                  | ``ph-x56``        |
++--------------------------+-------------------+
+| ``555-857-6309``         | ``ph-5555876309`` |
++--------------------------+-------------------+
