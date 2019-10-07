@@ -258,6 +258,30 @@ Example hostnames:
 | ``node1`` | ``k8s1`` | ``larry1`` |
 +-----------+----------+------------+
 
+Cluster Roles
+^^^^^^^^^^^^^
+
+If a cluster or logical grouping of machines has more than one role, this may
+be expressed in the hostname.  The format is ``<cluster>-<role><node>``.
+
+Example hostnames:
+
++---------+------+-------------------------+-------------+
+| cluster | role | instance                | hostname    |
++=========+======+=========================+=============+
+| comcam  | fp   | 1                       | comcam-fp1  |
++---------+------+-------------------------+-------------+
+| comcam  | mcm  | (there can be only one) | comcam-mcm  |
++---------+------+-------------------------+-------------+
+| comcam  | dc   | 1                       | comcam-dc1  |
++---------+------+-------------------------+-------------+
+| comcam  | hcu  | 1                       | comcam-hcu1 |
++---------+------+-------------------------+-------------+
+| comcam  | vw   | 1                       | comcam-vw1  |
++---------+------+-------------------------+-------------+
+| comcam  | db   | 1                       | comcam-db1  |
++---------+------+-------------------------+-------------+
+
 BMCs
 ----
 
