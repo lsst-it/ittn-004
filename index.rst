@@ -235,16 +235,44 @@ an existing tool that is able to generate `ISC BIND
 Hostnames
 =========
 
-Use "conversational" names.
+Servers/Hosts
+-------------
 
-bad
+Use "conversational" names -- the name that you would use to refer to a host
+in conversation with a co-worker.
 
-``node1``
+Highly generic terms such as ``node`` or ``server`` are often ambiguous.
+Using a functional description such as ``www``, ``webserver``,
+``kubernetes<node>``, ``hypervisor<node>`` convey more useful information and
+are more natural to use in human conversation.
 
-better
+Cluster names, if applicable, are often the least ambiguous way to refer to a
+host.  As an example, if the cluster name was ``larry``, nodes of that cluster
+may be named ``larry<node>``.
 
-``k8s1``
+Example hostnames:
 
-best
++-----------+----------+------------+
+| poor      | better   | preferred  |
++===========+==========+============+
+| ``node1`` | ``k8s1`` | ``larry1`` |
++-----------+----------+------------+
 
-``larry1``
+BMCs
+----
+
+A baseboard management controller (BMC) is tied to a specific physical server,
+therefore it makes sense for the hostname to reflect this relationship. The
+format is ``<phy hostname>-bmc``.
+
+Example hostnames:
+
++-------------------+---------------------+
+| physical hostname | BMC hostname        |
++===================+=====================+
+| ``larry1``        | ``larry1-bmc``      |
++-------------------+---------------------+
+| ``core1``         | ``core1-bmc``       |
++-------------------+---------------------+
+| ``comcam-db01``   | ``comcam-db01-bmc`` |
++-------------------+---------------------+
