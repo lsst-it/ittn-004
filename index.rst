@@ -12,30 +12,30 @@ Introduction
 
    — Phil Karlton
 
-We assert that hostnames are primarily for **human** convience and should be
-easy to remember, easy to predict, and conceses.  This should be the primary
+We assert that hostnames are primarily for **human** convenience and should be
+easy to remember, easy to predict, and concise.  This should be the primary
 guiding principle when developing naming heuristic(s).
 
-The current naming scheme being implimented at the summit was widely disliked
+The current naming scheme being implemented at the summit was widely disliked
 during discussion at the `Puppeton Tucson July 2019 <https://confluence.lsstcorp.org/display/LSSTCOM/Agenda+-+Puppeton+Tucson+July+2019>`_
 as being overly complex and difficult to understand.  During that event, it was
 agreed upon to `decouple the puppet role from the hostname
 <https://ittn-001.lsst.io/#decouple-node-fqdn-from-hierarchy-layers>`_, this
-change opens the door to revising the hostname and domain name strategy.
+change opens the door to revising the hos tame and domain name strategy.
 
-Implimenting a reformed DNS strategy is on the critical path for rolling out a
+Implementing a reformed DNS strategy is on the critical path for rolling out a
 `Deployment Platform <https://ittn-002.lsst.io/>`_ at the Summit and Base to
-support comissioning activities.  A practical and rapidly implimentable
+support commissioning activities.  A practical and rapidly implementable
 solution is urgently needed, even if it is not the complete solution that will
 be used during observatory operations.
 
 Goals
 =====
 
-* Support immediate development and commisioning needs
-* Rapid implimentation requiring low effort
+* Support immediate development and commissioning needs
+* Rapid implementation requiring low effort
 * Avoid disrupting existing desktop/AD environment
-* Low implimenation complexity / low maintence burden
+* Low implementation complexity / low maintenance burden
 * Avoid pain for multi-VPN users
 * Support automated deployment via `foreman
   <https://ittn-002.lsst.io/#bare-metal-provisioning>`_; DNS service must have
@@ -49,8 +49,8 @@ Environment
 
 There is an existing and mature Windows/Active Directory management environment
 both in Tucson and at the Base.  This includes functionality such as email and
-other desktop support related services. We propose a logical seperation of the
-desktop/AD envirnoment and Tucson Lab/Summit & Base datacenters.
+other desktop support related services. We propose a logical separation of the
+desktop/AD environment and Tucson Lab/Summit & Base data centers.
 
 Desktop/AD
 ^^^^^^^^^^
@@ -61,13 +61,13 @@ highly disruptive to desk users.  It would also require time consuming
 migration of the existing AD data.
 
 **The existing Desktop/AD environment(s) are explicitly out of scope of this
-document.**  Other than adjusting the domain seach list, it is recommended that
+document.**  Other than adjusting the domain search list, it is recommended that
 no refactoring of this environment is undertaken in the immediate future.
 
 Datacenter(s)/Lab(s)
 ^^^^^^^^^^^^^^^^^^^^
 
-The Tucson Test/Lab environment and the Summit/Base datacenters are less
+The Tucson Test/Lab environment and the Summit/Base data centers are less
 developed and somewhat less disruptive to refactor.
 
 **This document only applies to the Datacenter(s) and Lab(s) environments.**
@@ -91,21 +91,21 @@ Discussion
 Prior Art
 ---------
 
-There is an existing proposal for LSST DNS organzation, which is partially
-implimented at the Summit:
+There is an existing proposal for LSST DNS organization, which is partially
+implemented at the Summit:
 `LSST ITC DNS Infrastructure <https://confluence.lsstcorp.org/display/SYSENG/LSST+ITC+DNS+Infrastructure>`_.
 
-There are a number of criticisms of this propsoal, including:
+There are a number of criticisms of this proposal, including:
 
-* It sesults in large and difficult to remember hostnames. Eg.,
+* It results in large and difficult to remember hostnames. E.g.,
   ``comp-a4-hyp-gs-02.cp.cl.lsst.org``
-* Heavy paritioning / high complexity is not nessicary for the modest scale
+* Heavy partitioning / high complexity is not necessary for the modest scale
   of the in-scope environments.
-* Country level sub-domains are unnesicary partitioning for a small number of
+* Country level sub-domains are unnecessary partitioning for a small number of
   sites.
 * Hostnames for servers and services that encoding details for the physical
   location (room, rack, etc.) and/or network structure will result in brittle
-  configuration of dependant services.  Re-provisioning or relocating a server
+  configuration of dependent services.  Re-provisioning or relocating a server
   to a different location should not generally require client configuration
   changes.  Similarly, changes to the logical network should not require
   modifying the hostname.
@@ -116,7 +116,7 @@ Domains
 LSST as a project, and within the IT organization, is already using a number of
 different domains.  We do not believe there is a top level requirement or
 constraint that all or even most of LSST's computing infrastructure needs to be
-arranged in a hierachy underneath a common domain.
+arranged in a hierarchy underneath a common domain.
 
 A non-exhaustive list of domains known to be currently in use by LSST:
 
@@ -135,12 +135,12 @@ Split-View DNS and VPNs
 
 `Split-view or split-horzon DNS
 <https://en.wikipedia.org/wiki/Split-horizon_DNS>`_ is simply providing
-different name resolvution information to internal clients and the public DNS
-hierachy.  The implication of this is that "internal" name servers are the only
+different name resolution information to internal clients and the public DNS
+hierarchy.  The implication of this is that "internal" name servers are the only
 source of "internal" name information.  The motivation for a split view is
 often to avoid providing network information to an adversary.  However, the
 obscuration is by no measure absolute. For example, it does not mitigate
-traffic observation.  If any host with access to "internal" DNS is comprimised,
+traffic observation.  If any host with access to "internal" DNS is compromised,
 the hidden name information is exposed.  We also note that no LSST threat model
 currently exists which requires obscuring internal network information.
 
@@ -149,7 +149,7 @@ configured for VPN clients upon connection.  This model works for VPN users
 that will only ever be connected to a single VPN at a time.  However, it
 completely falls apart if multiple VPNs are in use, with each trying to
 configure its own nameservers to provide "internal" name resolution.  This
-problem is already being encountered within LSST Data Managment with remote
+problem is already being encountered within LSST Data Management with remote
 users needing to connect via VPN to both NCSA and NOAO in Tucson.
 
 Summit Degraded Operations
@@ -158,10 +158,8 @@ Summit Degraded Operations
 Unlike all other LSST sites, the summit network has a requirement to function
 with a complete loss of external connectivity.  We acknowledge that this means
 that a hosted service such as `route53 <https://aws.amazon.com/route53/>`_
-alone is not sufficent for the operational needs of the summit network.
-However, a hosted DNS service should be sufficent for all other sites.
-
-
+alone is not sufficient for the operational needs of the summit network.
+However, a hosted DNS service should be sufficient for all other sites.
 
 Domain name(s)
 ==============
@@ -199,14 +197,14 @@ option b
 Infrastructure
 ==============
 
-Foward and reverse DNS for all sites is managed via public route53 zones.
+Forward and reverse DNS for all sites is managed via public route53 zones.
 `route53 <https://aws.amazon.com/route53/>`_ is considered the canonical and
 sole "source of truth".  Two forwarding only / caching name servers shall be
 maintained per site.  DNS clients are configured to use the per site local
 resolvers to simplify any future refactoring.
 
 The local site domain shall be added to the domain search list of any desktop
-enviroments at that site.  E.g., ``tuc.lsst.cloud`` would be added to the
+environments at that site.  E.g., ``tuc.lsst.cloud`` would be added to the
 domain search list for desktop clients in Tucson.
 
 Local Resolvers
@@ -221,7 +219,7 @@ Summit/Cerro Pachón
 -------------------
 
 Prior to the start of operations, the summit nameservers shall be reconfigured
-to be "authoritive" for all local zones.  `route53
+to be "authoritative" for all local zones.  `route53
 <https://aws.amazon.com/route53/>`_ will continue to be the definitive source
 of truth.  The zone configuration for local nameservers shall be machine
 generated from route53 information.
