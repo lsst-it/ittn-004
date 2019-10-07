@@ -322,7 +322,7 @@ IP Phones
 
 IP Phones have a tendency to be migrated between physical rooms.  An example
 of this would be a desktop user migrating between offices and taking the phone
-with them.  Due to this mobility, phones should not be named by physical
+with them.  Due to this mobility, phones *shall not* be named by physical
 location.  While the extensions bound to a phone may change over time, it is a
 highly useful handle for identifying a device.  The suggested format is
 ``ph-x<primary extension>```.  If a phone does not have an internal extension
