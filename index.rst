@@ -16,10 +16,83 @@ We assert that hostnames are primarily for **human** convience and should be
 easy to remember, easy to predict, and conceses.  This should be the primary
 guiding principle when developing naming heuristic(s).
 
+The current naming scheme being implimented at the summit was widely disliked
+during discussion at the `Puppeton Tucson July 2019 <https://confluence.lsstcorp.org/display/LSSTCOM/Agenda+-+Puppeton+Tucson+July+2019>`_
+as being overly complex and difficult to understand.  During that event, it was
+agreed upon to `decouple the puppet role from the hostname
+<https://ittn-001.lsst.io/#decouple-node-fqdn-from-hierarchy-layers>`_, this
+change opens the door to revising the hostname and domain name strategy.
+
+Implimenting a reformed DNS strategy is on the critical path for rolling out a
+`Deployment Platform <https://ittn-002.lsst.io/>`_ at the Summit and Base to
+support comissioning activities.  A practical and rapidly implimentable
+solution is urgently needed, even if it is not the complete solution that will
+be used during observatory operations.
+
+Goals
+=====
+
+* Support immediate development and commisioning needs
+* Rapid implimentation requiring low effort
+* Avoid disrupting existing desktop/AD environment
+* Low implimenation complexity / low maintence burden
+* Avoid pain for multi-VPN users
+* Support automated deployment via `foreman
+  <https://ittn-002.lsst.io/#bare-metal-provisioning>`_; DNS service must have
+  an API that is supported by an existing ``foreman`` plugin.
+
+Scope
+=====
+
+Environment
+-----------
+
+There is an existing and mature Windows/Active Directory management environment
+both in Tucson and at the Base.  This includes functionality such as email and
+other desktop support related services. We propose a logical seperation of the
+desktop/AD envirnoment and Tucson Lab/Summit & Base datacenters.
+
+Desktop/AD
+^^^^^^^^^^
+
+The windows Desktops/Desktop Support infrastructure/Active Directory
+environments is well established and any change to name resolution would be
+highly disruptive to desk users.  It would also require time consuming
+migration of the existing AD data.
+
+**The existing Desktop/AD environment(s) are explicitly out of scope of this
+document.**  Other than adjusting the domain seach list, it is recommended that
+no refactoring of this environment is undertaken in the immediate future.
+
+Datacenter(s)/Lab(s)
+^^^^^^^^^^^^^^^^^^^^
+
+The Tucson Test/Lab environment and the Summit/Base datacenters are less
+developed and somewhat less disruptive to refactor.
+
+**This document only applies to the Datacenter(s) and Lab(s) environments.**
+
+Sites
+-----
+
+*These Datacenter(s)/Lab(s) environments are considered in scope:*
+
+* Lab/Tucson
+* Summit/Cerro Pachón
+* Base/La Serena
+
+**All other sites/envirnoments that may be hosting lsst equipment or services
+are explicitly out of scope.** E.g.: the names of camera development servers at
+SLAC
+
+Discussion
+==========
+
 Prior Art
 ---------
 
-There is an existing proposal for LSST DNS organzation at
+There is an existing proposal for LSST DNS organzation, which is partially
+implimented at the Summit:
 `LSST ITC DNS Infrastructure <https://confluence.lsstcorp.org/display/SYSENG/LSST+ITC+DNS+Infrastructure>`_.
 
 There are a number of criticisms of this propsoal, including:
@@ -88,32 +161,14 @@ that a hosted service such as `route53 <https://aws.amazon.com/route53/>`_
 alone is not sufficent for the operational needs of the summit network.
 However, a hosted DNS service should be sufficent for all other sites.
 
-Goals
-=====
-
-* Support immediate development and commisioning needs
-* Rapid implimentation
-* Avoid disrupting existing desktop/AD environment
-* Low implimenation complexity / low maintence burden
-* Avoid pain for multi-vpn users
-* Support automated deployment via forman (ittn-002); DNS service must have an API that is supported by an existing foreman plugin.
-
-Scope
-=====
-
-Sites
------
-
-* Summit
-* Base
-* Tucson
-
-All other envirnoments that may be hosting lsst equipment or services are
-explicitly out of scope. E.g.: the names of camera development servers at SLAC
 
 
 Domain name(s)
 ==============
+
+A per site sub-domain is to be used to provide isolated administrative domains
+which do not need to coordinate changes and to allow the same hostname to be
+used currently at multiple sites.
 
 option a
 ---------
@@ -146,7 +201,7 @@ Infrastructure
 
 Foward and reverse DNS for all sites is managed via public route53 zones.
 `route53 <https://aws.amazon.com/route53/>`_ is considered the canonical and
-sole "source of truth".  Two forwarding only / caching name servers are
+sole "source of truth".  Two forwarding only / caching name servers shall be
 maintained per site.  DNS clients are configured to use the per site local
 resolvers to simplify any future refactoring.
 
