@@ -232,6 +232,22 @@ generated from route53 information.
 an existing tool that is able to generate `ISC BIND
 <https://www.isc.org/bind/>`_ compatible zone files from route53 zones.
 
+TTLs
+----
+
+As local forwarding only resolvers are inherently non-authoritative, in order
+for changes to an existing record to become effective, the time to live (TTL)
+on that record will first have to expire.  For this reason, relatively short
+TTLs shall be used.
+
++------------+-------------------+
+| Host Type  | max TTL (seconds) |
++============+===================+
+| service    | 60                |
++------------+-------------------+
+| all others | 300               |
++------------+-------------------+
+
 Hostnames
 =========
 
