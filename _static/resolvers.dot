@@ -1,0 +1,71 @@
+graph top {
+//  dpi=100
+  ranksep=0.5
+  rankdir=TB
+  overlap=false
+  newrank=true
+  clusterrank=local
+
+  // services
+  {
+    node [shape=ellipse fontsize=14 style=filled fillcolor=white color=darkgreen fontcolor=darkgreen]
+    tdns1 [label="DNS\nprimary forwarder"]
+    tdns2 [label="DNS\nsecondary forwarder"]
+    bdns1 [label="DNS\nprimary forwarder"]
+    bdns2 [label="DNS\nsecondary forwarder"]
+    sdns1 [label="DNS\nprimary forwarder"]
+    sdns2 [label="DNS\nsecondary forwarder"]
+  }
+
+  subgraph cluster_0 {
+    label="AWS"
+    fontsize=18
+    style=dashed
+
+    subgraph cluster_1 {
+      label="route53"
+      color=dimgray
+      fontcolor=dimgray
+      fontsize=12
+      style=bold
+
+      zones
+    }
+  }
+
+  subgraph cluster_2 {
+    label="Tucson Lab"
+    fontsize=18
+    style=dashed
+
+    tdns1
+    tdns2
+  }
+
+  subgraph cluster_3 {
+    label="Base Data Center"
+    fontsize=18
+    style=dashed
+
+    bdns1
+    bdns2
+  }
+
+  subgraph cluster_4 {
+    label="Summit Data Center"
+    fontsize=18
+    style=dashed
+
+    sdns1
+    sdns2
+  }
+
+  tdns1 -- zones
+  tdns2 -- zones
+
+  bdns1 -- zones
+  bdns2 -- zones
+
+  sdns1 -- zones
+  sdns2 -- zones
+}
